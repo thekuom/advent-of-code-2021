@@ -1,0 +1,25 @@
+[package]
+name = "aoc"
+version = "0.1.0"
+authors = ["Matthew Kuo <matthew.kuo@dialexa.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+
+[[bin]]
+path = "src/bin/p1_1.rs"
+name = "p1_1"
+
+[[bin]]
+path = "src/bin/p1_2.rs"
+name = "p1_2"
+
+[[bin]]
+path = "src/bin/p2.rs"
+name = "p2"
+
+[[bin]]
+path = "src/bin/p3_1.rs"
+name = "p3_1"
