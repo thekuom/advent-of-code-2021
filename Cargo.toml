@@ -47,3 +47,11 @@ name = "p6_1"
 [[bin]]
 path = "src/bin/p6_2.rs"
 name = "p6_2"
+
+[[bin]]
+path = "src/bin/p7_1.rs"
+name = "p7_1"
+
+[[bin]]
+path = "src/bin/p7_2.rs"
+name = "p7_2"
