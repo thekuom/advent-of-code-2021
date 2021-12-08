@@ -3,9 +3,7 @@ use aoc::*;
 
 fn main() {
     if let Ok(lines) = read_lines("./input/p8.txt") {
-        let mut result = 0;
-
-        for line in lines {
+        let result = lines.fold(0, |current_total, line| {
             let line = line.unwrap();
             let split = line.split(" | ").collect::<Vec<_>>();
             let unique_digits = split[0].split(" ").collect::<Vec<_>>();
@@ -37,10 +35,10 @@ fn main() {
                 .collect::<Vec<_>>();
 
             // six - one leaves us with 5 segments (while nine or zero - 1 leaves us with 4)
-            let six = six_seg_digits.iter().filter(|d| {
-                let set = d.chars().collect::<HashSet<char>>();
-                return set.difference(digit_segments.get(&1).unwrap()).count() == 5;
-            }).next().unwrap();
+            let six = six_seg_digits.iter().filter(|d|
+                d.chars().collect::<HashSet<char>>()
+                    .difference(digit_segments.get(&1).unwrap()).count() == 5
+            ).next().unwrap();
             populate_digit_segments(&mut digit_segments, 6, six);
             // c = eight - six
             populate_segment_wiring(&mut segment_wiring, 'c', get_first_diff(&digit_segments, 8, 6));
@@ -51,10 +49,10 @@ fn main() {
             populate_segment_wiring(&mut segment_wiring, 'f', *one_segments.iter().next().unwrap());
 
             // nine - four leaves us with 2 segments
-            let nine = six_seg_digits.iter().filter(|d| {
-                let set = d.chars().collect::<HashSet<char>>();
-                return set.difference(digit_segments.get(&4).unwrap()).count() == 2;
-            }).next().unwrap();
+            let nine = six_seg_digits.iter().filter(|d|
+                d.chars().collect::<HashSet<char>>()
+                    .difference(digit_segments.get(&4).unwrap()).count() == 2
+            ).next().unwrap();
             populate_digit_segments(&mut digit_segments, 9, nine);
             // e = eight - nine
             populate_segment_wiring(&mut segment_wiring, 'e', get_first_diff(&digit_segments, 8, 9));
@@ -106,27 +104,15 @@ fn main() {
                 digit_segments.get_mut(&2).unwrap().insert(char);
             }
 
-            let to_add = output_digits.iter().enumerate().fold(0 as i32, |acc, (idx, output_digit)| {
+            current_total + output_digits.iter().enumerate().fold(0 as i32, |acc, (idx, output_digit)| {
                 let multiplier = 1000 / ((10 as i32).pow(idx as u32)) as i32;
-                let real_digit = *digit_segments.iter().filter(|x| {
-                    if (*x).1.len() != output_digit.len() {
-                        return false;
-                    }
-
-                    for c in output_digit.chars() {
-                        if !(*x).1.contains(&c) {
-                            return false;
-                        }
-                    }
-
-                    true
-                }).next().unwrap().0;
+                let real_digit = *digit_segments.iter().filter(|&(_, x)|
+                    x == &output_digit.chars().collect::<HashSet<_>>()
+                ).next().unwrap().0;
 
                 acc + multiplier * real_digit
-            });
-
-            result += to_add;
-        }
+            })
+        });
 
         println!("{}", result);
     }
